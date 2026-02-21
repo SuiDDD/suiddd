@@ -4,10 +4,13 @@ version: 3.0.2
 environment:
   sdk: ">=3.10.0"
 dependencies:
+  basic_utils: ^5.7.0
   collection: any
   cross_file: any
+  crypton: ^2.2.1
   desktop_drop: any
   dtd: any
+  ffi: ^2.2.0
   file_picker: any
   flutter:
     sdk: flutter
@@ -20,6 +23,7 @@ dependencies:
   json_rpc_2: any
   material_symbols_icons: any
   path: any
+  path_provider: ^2.1.5
   shared_preferences: any
   stack_trace: any
   url_launcher: any

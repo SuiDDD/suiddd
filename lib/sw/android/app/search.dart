@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:ddd/main.dart';
-import 'package:ddd/d.dart';
+import 'package:ddd/sw/android/d.dart';
 
 class Search extends StatefulWidget {
   final bool show;

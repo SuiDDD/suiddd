@@ -2,15 +2,15 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:ddd/lang/l.dart';
-import 'package:ddd/d.dart';
-import 'package:ddd/file/file_pull.dart';
-import 'package:ddd/file/file_push.dart';
-import 'package:ddd/file/file_refresh.dart';
-import 'package:ddd/file/file_create.dart';
-import 'package:ddd/file/file_rename.dart';
-import 'package:ddd/file/file_delete.dart';
-import 'package:ddd/file/file_properties.dart';
-import 'package:ddd/file/file_panel.dart';
+import 'package:ddd/sw/android/d.dart';
+import 'package:ddd/sw/android/file/file_pull.dart';
+import 'package:ddd/sw/android/file/file_push.dart';
+import 'package:ddd/sw/android/file/file_refresh.dart';
+import 'package:ddd/sw/android/file/file_create.dart';
+import 'package:ddd/sw/android/file/file_rename.dart';
+import 'package:ddd/sw/android/file/file_delete.dart';
+import 'package:ddd/sw/android/file/file_properties.dart';
+import 'package:ddd/sw/android/file/file_panel.dart';
 
 class FileInfo {
   final String name, permissions, date, time;

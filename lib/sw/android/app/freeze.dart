@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:ddd/app/service.dart';
+import 'package:ddd/sw/android/app/service.dart';
 import 'package:ddd/lang/l.dart';
-import 'package:ddd/su.dart';
+import 'package:ddd/sw/android/su.dart';
 
 class AppFreezeManager {
   final Future<dynamic> Function(List<String> args) onAdbCommand;

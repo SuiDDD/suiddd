@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:ddd/app/main.dart';
-import 'package:ddd/file/file.dart';
+import 'package:ddd/sw/android/app/main.dart';
+import 'package:ddd/sw/android/file/file.dart';
 import 'package:ddd/main.dart';
 import 'package:ddd/lang/l.dart';
-import 'package:ddd/d.dart';
-import 'package:ddd/quickset.dart';
+import 'package:ddd/sw/android/d.dart';
+import 'package:ddd/sw/android/quickset.dart';
 
 const String as = 'shell';
 const String ass = 'su -c';

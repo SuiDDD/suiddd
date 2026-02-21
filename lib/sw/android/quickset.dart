@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:ddd/d.dart';
+import 'package:ddd/sw/android/d.dart';
 import 'package:ddd/lang/l.dart';
 
 class QuickSettingsTiles extends StatefulWidget {

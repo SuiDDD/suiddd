@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ddd/app/service.dart';
+import 'package:ddd/sw/android/app/service.dart';
 import 'package:ddd/lang/l.dart';
 
 class AppInfoCard extends StatefulWidget {

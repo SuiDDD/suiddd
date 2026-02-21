@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:ddd/d.dart';
+import 'package:ddd/sw/android/d.dart';
 import 'package:ddd/lang/l.dart';
-import 'package:ddd/info.dart';
-import 'package:ddd/su.dart';
+import 'package:ddd/sw/android/info.dart';
+import 'package:ddd/sw/android/su.dart';
 import 'package:ddd/main.dart';
 
 class AReboot extends StatefulWidget {

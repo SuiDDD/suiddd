@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:ddd/file/file.dart';
+import 'package:ddd/sw/android/file/file.dart';
 import 'package:ddd/main.dart';
 
 class FilePanel extends StatefulWidget {

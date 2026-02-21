@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:ddd/file/file.dart';
+import 'package:ddd/sw/android/file/file.dart';
 import 'package:ddd/lang/l.dart';
 import 'package:ddd/main.dart';
-import 'package:ddd/su.dart';
+import 'package:ddd/sw/android/su.dart';
 
 class FileProperties extends StatelessWidget {
   final int idx;

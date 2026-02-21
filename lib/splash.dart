@@ -30,6 +30,12 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _initLogic() async {
+    if (Platform.isAndroid) {
+      _logAdd('S System: Android ${Platform.operatingSystemVersion}');
+      _logAdd('S Engine: NativeADB Initialized');
+      SplashScreen.adbPath = 'NativeADB';
+      return _goto();
+    }
     final prefs = await SharedPreferences.getInstance();
     String? savedPath = prefs.getString('custom_adb_path');
     if (savedPath != null && await _verifyAdb(savedPath)) {
