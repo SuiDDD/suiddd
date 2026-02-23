@@ -4,30 +4,29 @@ version: 3.0.2
 environment:
   sdk: ">=3.10.0"
 dependencies:
-  basic_utils: ^5.7.0
-  collection: any
-  cross_file: any
-  crypton: ^2.2.1
-  desktop_drop: any
-  dtd: any
+  basic_utils: ^5.8.2
+  collection: ^1.19.1
+  cross_file: ^0.3.5+2
+  desktop_drop: ^0.7.0
+  dtd: ^4.0.0
   ffi: ^2.2.0
-  file_picker: any
+  file_picker: ^10.3.10
   flutter:
     sdk: flutter
-  flutter_lints: any
+  flutter_lints: ^6.0.0
   flutter_localizations:
     sdk: flutter
-  google_fonts: any
+  google_fonts: ^8.0.2
   http: ^1.6.0
-  intl: any
-  json_rpc_2: any
-  material_symbols_icons: any
-  path: any
+  intl: ^0.20.2
+  json_rpc_2: ^4.1.0
+  material_symbols_icons: ^4.2906.0
+  path: ^1.9.1
   path_provider: ^2.1.5
-  shared_preferences: any
-  stack_trace: any
-  url_launcher: any
-  web: any
+  shared_preferences: ^2.5.4
+  stack_trace: ^1.12.1
+  url_launcher: ^6.3.2
+  web: ^1.1.1
 flutter:
   uses-material-design: true
   generate: true

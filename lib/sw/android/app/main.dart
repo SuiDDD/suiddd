@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:ddd/lang/l.dart';
 import 'package:ddd/main.dart';
-import 'package:ddd/sw/android/su.dart';
 import 'package:ddd/sw/android/d.dart';
 import 'package:ddd/sw/android/app/card.dart';
 import 'package:ddd/sw/android/app/freeze.dart';
@@ -25,7 +24,6 @@ class AApps extends StatefulWidget {
 }
 
 class _AAppsState extends State<AApps> {
-  String? _path;
   List<AppInfo> _appInfos = [], _filtered = [], _selected = [];
   bool _dataLoaded = false, _selectionMode = false, _showSearchBar = false;
   final Map<String, String> _status = {};
@@ -47,26 +45,22 @@ class _AAppsState extends State<AApps> {
   }
 
   Future<void> _refresh() async {
-    final res = await Service.load(_adb);
+    final res = await Service.load(_ddbClient, context);
     if (!mounted) return;
     if (res.containsKey('error')) {
       final err = res['error'];
-      if (err == 'plugin_missing') await ASU.pluginapp(context);
-      if (!mounted) return;
-      if (err == 'verification_failed') {
+      if (err == 'connection_failed') {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(L.of(context)!.verification_failed, style: kText(context)),
             backgroundColor: Colors.red,
           ),
         );
-        await ASU.pluginapp(context, verificationFailed: true);
       }
       if (mounted) setState(() => _dataLoaded = true);
       return;
     }
     setState(() {
-      _path = res['path'];
       _appInfos = res['apps'];
       _filtered = res['apps'];
       _dataLoaded = true;
@@ -184,7 +178,6 @@ class _AAppsState extends State<AApps> {
                   }
                 }),
                 status: _status,
-                path: _path!,
                 l: L.of(context)!,
                 imageCache: Service.imageCache,
               ),

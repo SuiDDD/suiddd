@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ddd/sw/android/app/service.dart';
@@ -10,10 +9,9 @@ class AppInfoCard extends StatefulWidget {
   final List<AppInfo> selected;
   final Function(AppInfo) onTap;
   final Map<String, String> status;
-  final String path;
   final L l;
   final Map<String, ImageProvider> imageCache;
-  const AppInfoCard({super.key, required this.appInfo, required this.selectionMode, required this.selected, required this.onTap, required this.status, required this.path, required this.l, required this.imageCache});
+  const AppInfoCard({super.key, required this.appInfo, required this.selectionMode, required this.selected, required this.onTap, required this.status, required this.l, required this.imageCache});
   @override
   State<AppInfoCard> createState() => _AppInfoCardState();
 }
@@ -81,7 +79,6 @@ class _AppInfoCardState extends State<AppInfoCard> with AutomaticKeepAliveClient
     super.build(context);
     final theme = Theme.of(context);
     final a = widget.appInfo;
-    final iconFile = File('${widget.path}${Platform.pathSeparator}Icons${Platform.pathSeparator}${a.appName}-${a.packageName}.png');
     final isSelected = widget.selected.any((s) => s.packageName == a.packageName);
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 2),
@@ -105,7 +102,7 @@ class _AppInfoCardState extends State<AppInfoCard> with AutomaticKeepAliveClient
                   SizedBox(
                     width: 48,
                     height: 48,
-                    child: widget.imageCache[a.packageName] != null ? Image(image: widget.imageCache[a.packageName]!, fit: BoxFit.contain) : (iconFile.existsSync() ? Image.file(iconFile, fit: BoxFit.contain) : Icon(Icons.android_rounded, size: 36, color: theme.colorScheme.outlineVariant)),
+                    child: widget.imageCache[a.packageName] != null ? Image(image: widget.imageCache[a.packageName]!, fit: BoxFit.contain) : Icon(Icons.android_rounded, size: 36, color: theme.colorScheme.outlineVariant),
                   ),
                   if (a.systemApp == '1')
                     Positioned(

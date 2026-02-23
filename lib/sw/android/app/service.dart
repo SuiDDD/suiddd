@@ -1,5 +1,8 @@
 import 'dart:io';
+import 'dart:convert';
+import 'package:ddd/lang/l.dart';
 import 'package:flutter/material.dart';
+import 'package:ddd/sw/android/d.dart';
 
 class AppInfo {
   final String appName, version, packageName, apkPath, packageSize, dataPath, uid, firstInstallTime, lastUpdateTime, targetSdk, systemApp;
@@ -8,37 +11,47 @@ class AppInfo {
 
 class Service {
   static final Map<String, ImageProvider> imageCache = {};
-  static Future<Map<String, dynamic>> load(Future<dynamic> Function(List<String>) adb) async {
-    final startResult = await adb(['shell', 'am', 'start', '-n', 'com.rstplugin/.MainActivity']);
-    if (startResult.stdout.toString().contains('Error') || startResult.stderr.toString().contains('Error')) return {'error': 'plugin_missing'};
-    await Future.delayed(const Duration(seconds: 1));
-    final broadcast = await adb(['shell', 'am', 'broadcast', '-a', 'rstplugin-export_app_info']);
-    if (!broadcast.stdout.toString().contains('Broadcast completed')) return {'error': 'broadcast_failed'};
-    bool ok = false;
-    for (int i = 0; i < 3; i++) {
-      final grep = await adb(['shell', 'grep', '-E', '01001111.*01001011', '/storage/emulated/0/Android/data/com.rstplugin/files/app_info/1.txt']);
-      if (grep.stdout.toString().trim() == '01001111 01001011') {
-        ok = true;
-        break;
+  static String? _currentDevice;
+  static Future<bool> _setupPortForward(D adb, BuildContext context) async {
+    final device = adb.deviceId;
+    if (device == null) return false;
+    try {
+      if (_currentDevice != null && _currentDevice != device) await adb.execute('forward --remove tcp:9999', L.of(context)!);
+      await adb.execute('forward tcp:9999 tcp:9999', L.of(context)!);
+      _currentDevice = device;
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  static Future<Map<String, dynamic>> load(D adb, BuildContext context) async {
+    if (!await _setupPortForward(adb, context)) return {'error': 'adb_forward_failed'};
+    try {
+      final socket = await Socket.connect('127.0.0.1', 9999, timeout: const Duration(seconds: 5));
+      socket.write('suiddd-export_app_info|\n');
+      await socket.flush();
+      final bytes = <int>[];
+      await for (final chunk in socket.timeout(const Duration(seconds: 15), onTimeout: (s) => s.close())) {
+        bytes.addAll(chunk);
+        if (utf8.decode(chunk, allowMalformed: true).contains('DONE')) break;
       }
-      if (i < 2) await Future.delayed(const Duration(seconds: 3));
+      socket.destroy();
+      final content = utf8.decode(bytes).split('DONE').first.trim();
+      if (content.isEmpty) return {'path': '', 'apps': <AppInfo>[]};
+      final apps =
+          content
+              .split('\n\n')
+              .map((block) {
+                final lines = block.split('\n').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
+                return lines.length >= 11 ? AppInfo(appName: lines[0], version: lines[1], packageName: lines[2], packageSize: lines[3], targetSdk: lines[4], uid: lines[5], systemApp: lines[6], apkPath: lines[7], dataPath: lines[8], firstInstallTime: lines[9], lastUpdateTime: lines[10]) : null;
+              })
+              .whereType<AppInfo>()
+              .toList()
+            ..sort((a, b) => a.appName.toLowerCase().compareTo(b.appName.toLowerCase()));
+      return {'path': '', 'apps': apps};
+    } catch (_) {
+      return {'error': 'connection_failed'};
     }
-    if (!ok) return {'error': 'verification_failed'};
-    final exeDir = Directory(Platform.resolvedExecutable).parent.path;
-    final baseDir = '$exeDir${Platform.pathSeparator}data';
-    final path = '$baseDir${Platform.pathSeparator}app_info';
-    await adb(['pull', '/storage/emulated/0/Android/data/com.rstplugin/files/app_info', baseDir]);
-    final f = File('$path${Platform.pathSeparator}1.txt');
-    if (!(await f.exists())) return {'error': 'file_missing'};
-    final lines = (await f.readAsString()).split('\n').where((l) => l.trim().isNotEmpty).toList();
-    final apps = <AppInfo>[];
-    for (int i = 0; i + 10 < lines.length; i += 11) {
-      final app = AppInfo(appName: lines[i], version: lines[i + 1], packageName: lines[i + 2], packageSize: lines[i + 3], targetSdk: lines[i + 4], uid: lines[i + 5], systemApp: lines[i + 6], apkPath: lines[i + 7], dataPath: lines[i + 8], firstInstallTime: lines[i + 9], lastUpdateTime: lines[i + 10]);
-      apps.add(app);
-      final icon = File('$path${Platform.pathSeparator}Icons${Platform.pathSeparator}${app.appName}-${app.packageName}.png');
-      if (icon.existsSync()) imageCache[app.packageName] = FileImage(icon);
-    }
-    apps.sort((a, b) => a.appName.compareTo(b.appName));
-    return {'path': path, 'apps': apps};
   }
 }
